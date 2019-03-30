@@ -1,3 +1,7 @@
+"""
+A basic Python-based ETL program for working with CSV data sources
+"""
+
 import csv, os, sqlalchemy as sql
 from sqlalchemy import create_engine
 import psycopg2
