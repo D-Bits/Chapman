@@ -1,6 +1,5 @@
 import csv, os, sqlalchemy as sql
 from sqlalchemy import create_engine
-import sqlalchemy.pool as pool
 import psycopg2
 
 # Create custom connection function
