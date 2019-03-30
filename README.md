@@ -10,3 +10,7 @@ minor changes to the underlying codebase.
 
 * SQLAlchemy 1.3.1
 * psycopg2 2.7.7 
+
+## Future Objectives
+
+* Add ETL scripts for working with other data sources (JSON, spreadsheets, etc.)
