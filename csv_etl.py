@@ -15,12 +15,13 @@ def db_connection():
     user = os.environ.get('POSTGRES_USER')
     pgpass = os.environ.get('PG_PASS')
 
-    connect = psycopg2.connect(database=db, host=host, user=user, password=pgpass)
-    return connect
+    connection = psycopg2.connect(database=db, host=host, user=user, password=pgpass)
+    return connection
 
 # Define engine
 engine = create_engine('postgresql+psycopg2://', creator=db_connection)
 
+# Define ETL operations
 def etl():
     # Seed the users table w/ sample data from csv file
     with open('data.csv', 'r') as data_file:
