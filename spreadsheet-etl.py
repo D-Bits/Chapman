@@ -1,11 +1,10 @@
 """
 A basic Python-based ETL program for working with spreadsheet data sources
 """
-
-import os
 from sqlalchemy import create_engine
 from pandas import read_excel
 import psycopg2
+import os
 
 
 # Create custom connection function
@@ -28,13 +27,18 @@ engine = create_engine('postgresql+psycopg2://', creator=db_connection)
 # Define ETL operations
 def etl():
 
-    with read_excel('') as target:
-        pass
+    with open('world-ports.xlsx', 'r') as data_src:
+        reader = read_excel(data_src)
+        next(reader) # Skip header row
+        for row in reader:
+            engine.execute(
+                "INSERT INTO ports(city, MetroPop, AnnualCargo) VALUES(%s, %s, %s)",
+                row
+            )
 
 
 def main():
-    
-    etl()
 
+    etl()
 
 main()
