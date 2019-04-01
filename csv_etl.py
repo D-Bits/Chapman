@@ -6,6 +6,7 @@ import csv, os, sqlalchemy as sql
 from sqlalchemy import create_engine
 import psycopg2
 
+
 # Create custom connection function
 def db_connection():
 
@@ -18,8 +19,10 @@ def db_connection():
     connection = psycopg2.connect(database=db, host=host, user=user, password=pgpass)
     return connection
 
+
 # Define engine
 engine = create_engine('postgresql+psycopg2://', creator=db_connection)
+
 
 # Define ETL operations
 def etl():
@@ -33,9 +36,11 @@ def etl():
                 row
             )
 
+
 def main():
 
     db_connection()
     etl()
+
 
 main()
