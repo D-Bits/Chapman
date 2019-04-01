@@ -10,6 +10,7 @@ sqlalchemy = "*"
 psycopg2 = "*"
 openpyxl = "*"
 pandas = "*"
+xlrd = "*"
 
 [requires]
 python_version = "3.6"
