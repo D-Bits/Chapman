@@ -9,7 +9,8 @@ minor changes to the underlying codebase.
 ## Tools Used
 
 * SQLAlchemy 1.3.1
-* psycopg2 2.7.7 
+* psycopg2 2.7.7
+* pandas 0.24.2 
 
 ## Future Objectives
 
