@@ -16,4 +16,4 @@ pgport = getenv('POSTGRES_PORT')
 db_connection = connect(database='ETL_Test', host=pghost, user=pguser, password=pgpass)
 
 # Create a SQLAlchemy engine to write CSV data to the db
-csv_engine = create_engine(f"postgresql+psycopg2://{pguser}:{pgpass}@{pghost}:{pgport}/ETL_Test")
+db_engine = create_engine(f"postgresql+psycopg2://{pguser}:{pgpass}@{pghost}:{pgport}/ETL_Test")
