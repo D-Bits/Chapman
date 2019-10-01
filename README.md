@@ -5,8 +5,9 @@ Python based ETL program(s).
 ## Tools Used
 
 * Python3
+* Pandas
 * SQL Alchemy
 * Psycopg2 
-* OpenPyXL
+
 
   *See Pipfile for more info. 
