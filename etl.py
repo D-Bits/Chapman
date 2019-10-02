@@ -5,21 +5,35 @@ A basic Python-based ETL program for working with CSV data sources
 import csv, os, sqlalchemy as sql
 import pandas as pd
 import psycopg2 as pg
+from pandas.errors import DtypeWarning, EmptyDataError
 from config import db_connection, db_engine  
 
 
 # ETL for CSV files
-def csv_etl(src):
+def csv_etl(src, table):
 
-    df = pd.read_csv(src)
-    df.to_sql('employees', db_engine, index_label='id', if_exists='append')
+    try:        
+        df = pd.read_csv(src)
+        df.to_sql(table, db_engine, index_label='id', if_exists='append')
+        input('Data has finished loading into the database. Press enter to exit.')
+        
+    except EmptyDataError:
+        input('Error: No data in data source! Press enter to exit.')
+    except DtypeWarning:
+        input('Error: Incompatible data type! Press enter to exit.')
 
 
+# ETL for Excel work books
 def excel_etl(src, sheet_name):
 
-    df = pd.read_excel(src, sheet_name=sheet_name)
-    df.to_sql('users', db_engine, index_label='id', if_exists='append')
+    try:
+        df = pd.read_excel(src, sheet_name=sheet_name)
+        df.to_sql('users', db_engine, index_label='id', if_exists='append')
 
+    except EmptyDataError:
+        input('Error: No data in data source! Press enter to exit.')
+    except DtypeWarning:
+        input('Error: Incompatible data type! Press enter to exit.')
 
 
 # An older-methodoology, using raw SQL.
