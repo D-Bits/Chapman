@@ -9,7 +9,8 @@ from pandas.errors import DtypeWarning, EmptyDataError
 from config import db_connection, db_engine  
 
 
-# ETL for CSV files
+# ETL for CSV files. "src" = csv file to extract from, 
+# "table"= db table to load data into. 
 def csv_etl(src, table):
 
     try:        
@@ -24,11 +25,11 @@ def csv_etl(src, table):
 
 
 # ETL for Excel work books
-def excel_etl(src, sheet_name):
+def excel_etl(src, sheet, table):
 
     try:
-        df = pd.read_excel(src, sheet_name=sheet_name)
-        df.to_sql('users', db_engine, index_label='id', if_exists='append')
+        df = pd.read_excel(src, sheet_name=sheet)
+        df.to_sql(table, db_engine, index_label='id', if_exists='append')
 
     except EmptyDataError:
         input('Error: No data in data source! Press enter to exit.')
@@ -50,6 +51,3 @@ def raw_sql_etl():
             )
 
         print('Query executed.')
-
-
-excel_etl('users.xlsx', 'data')
