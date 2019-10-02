@@ -27,6 +27,8 @@ if __name__ == "__main__":
         table_name = input('Input the name of the table in the database that you want to load data into: ')
         if file_name is None:
             raise Exception('File name cannot be null!')
+        elif table_name is None:
+            raise Exception('Must specify a table in the database!')
         else:
             csv_etl(file_name, table_name)
 
@@ -37,6 +39,9 @@ if __name__ == "__main__":
         table_name = input('Input the name of the table in the database that you want to load data into: ')
         if file_name is None:
             raise Exception('File and/or sheet name cannot be null!')
+        elif sheet_name is None:
+            raise Exception('Sheet name cannot be null!')
+        elif table_name is None:
+            raise Exception('Table name cannot be null!')
         else:
             excel_etl(file_name, sheet_name, table_name)
-            
