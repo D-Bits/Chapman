@@ -1,4 +1,5 @@
 from etl import csv_etl, excel_etl
+from sqlalchemy import create_engine
 
 
 # Store the user's options in a dictionary
@@ -23,7 +24,7 @@ if __name__ == "__main__":
 
     if u_choice == 1:
         # Promt the user to enter a file name
-        file_name = input('Enter a CSV file name, with the extension (Ex: "data.csv"): ')
+        file_name = input('Enter a full path, and a CSV file name, with the extension (Ex: "data.csv"): ')
         table_name = input('Input the name of the table in the database that you want to load data into: ')
         if file_name is None:
             raise Exception('File name cannot be null!')
@@ -31,10 +32,10 @@ if __name__ == "__main__":
             raise Exception('Must specify a table in the database!')
         else:
             csv_etl(file_name, table_name)
-
+            
     elif u_choice == 2:
         # Promt the user to enter a file name, and a sheet name
-        file_name = input('Enter a file name for your Excel workbook, with the extension (Ex: "info.xlsx"): ')
+        file_name = input('Enter a full path, and file name for your Excel workbook, with the extension (Ex: "/username/home/documents/info.xlsx"): ')
         sheet_name = input('Enter a name for the sheet in your workbook that you would like to extract data from (Ex: "Sheet1"): ')
         table_name = input('Input the name of the table in the database that you want to load data into: ')
         if file_name is None:
