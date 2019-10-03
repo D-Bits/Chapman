@@ -5,8 +5,9 @@ A basic Python-based ETL program for working with CSV data sources
 import csv, os, sqlalchemy as sql
 import pandas as pd
 import psycopg2 as pg
+from json import dumps
 from pandas.errors import DtypeWarning, EmptyDataError
-from config import db_connection, db_engine  
+from config import db_connection, db_engine, api_json  
 
 
 
@@ -44,6 +45,11 @@ def excel_etl(src, sheet, table):
 
 
 # ETL for JSON datasets
-def json_etl(src, table):
+def json_etl():
 
-    pass
+    data = dumps(api_json)
+    df = pd.DataFrame.from_dict(api_json)
+
+    df.head()
+
+json_etl()
