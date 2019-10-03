@@ -8,9 +8,8 @@ verify_ssl = true
 [packages]
 sqlalchemy = "*"
 psycopg2 = "*"
-openpyxl = "*"
 pandas = "*"
-xlrd = "*"
+requests = "*"
 
 [requires]
 python_version = "3.6"
