@@ -6,18 +6,28 @@ import csv, os, sqlalchemy as sql
 import pandas as pd
 import psycopg2 as pg
 from json import dumps
+from sqlalchemy.types import VARCHAR
 from pandas.errors import DtypeWarning, EmptyDataError
 from config import db_connection, db_engine, api_json  
-
 
 
 # ETL for CSV files. "src" = csv file to extract from, 
 # "table"= db table to load data into. 
 def csv_etl(src, table):
 
+    # Define data types for the table
+    data_types = {
+        "last_name": VARCHAR(255),
+        "first_name": VARCHAR(255),
+        "email": VARCHAR(255),
+        "street": VARCHAR(255),
+        "city": VARCHAR(255),
+        "state": VARCHAR(255),
+    }
+
     try:        
         df = pd.read_csv(src)
-        df.to_sql(table, db_engine, index_label='id', if_exists='append')
+        df.to_sql(table, db_engine, index_label='id', if_exists='append', dtype=data_types, chunksize=len(df))
         input(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
 
     # Throw exception if data source is empty           
@@ -47,9 +57,8 @@ def excel_etl(src, sheet, table):
 # ETL for JSON datasets
 def json_etl():
 
-    data = dumps(api_json)
-    df = pd.DataFrame.from_dict(api_json)
-
+    data_dump = dumps(api_json)
+    df = pd.read_json(api_json, orient='split')
     df.head()
 
-# json_etl()
+#json_etl()
