@@ -9,17 +9,18 @@ from requests import get
 
 
 # Define credentials using environment vars
-pghost = getenv('POSTGRES_HOST')
-pguser = getenv('POSTGRES_USER')
+pghost = getenv('PG_HOST')
+pguser = getenv('PG_USER')
 pgpass = getenv('PG_PASS')
-pgport = getenv('POSTGRES_PORT')
+pgport = getenv('PG_PORT')
 
-db_connection = connect(database='ETL_Test', host=pghost, user=pguser, password=pgpass)
+db_connection = connect(database='etl_test', host=pghost, user=pguser, password=pgpass)
 
 # Create a SQLAlchemy engine to write CSV data to the db
-db_engine = create_engine(f"postgresql+psycopg2://{pguser}:{pgpass}@{pghost}:{pgport}/ETL_Test")
+db_engine = create_engine(f"postgresql+psycopg2://{pguser}:{pgpass}@{pghost}:{pgport}/etl_test")
 
 # API endpoint and key
 api_key = getenv('MOCKAROO_API_KEY')
 endpoint = get(f'https://my.api.mockaroo.com/super_secret_info.json?key={api_key}')
 api_json = endpoint.json()
+
