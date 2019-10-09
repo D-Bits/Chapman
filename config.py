@@ -21,6 +21,6 @@ db_engine = create_engine(f"postgresql+psycopg2://{pguser}:{pgpass}@{pghost}:{pg
 
 # API endpoint and key
 api_key = getenv('MOCKAROO_API_KEY')
-endpoint = get(f'https://my.api.mockaroo.com/super_secret_info.json?key={api_key}')
+endpoint = get(f'https://my.api.mockaroo.com/super_secret_info.json?key=53c79190')
 api_json = endpoint.json()
 

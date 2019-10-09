@@ -6,8 +6,9 @@ import csv, os, sqlalchemy as sql
 import pandas as pd
 import psycopg2 as pg
 from json import dumps
-from sqlalchemy.types import VARCHAR
+from sqlalchemy.types import VARCHAR, Date
 from pandas.errors import DtypeWarning, EmptyDataError
+from pandas.io.json import json_normalize
 from config import db_connection, db_engine, api_json  
 
 
@@ -41,6 +42,16 @@ def csv_etl(src, table):
 # ETL for Excel work books
 def excel_etl(src, sheet, table):
 
+    # Define data types for the table
+    data_types = {
+        "last_name": VARCHAR(255),
+        "first_name": VARCHAR(255),
+        "email": VARCHAR(255),
+        "street": VARCHAR(255),
+        "city": VARCHAR(255),
+        "state": VARCHAR(255),
+    }
+
     try:
         df = pd.read_excel(src, sheet_name=sheet)
         df.to_sql(table, db_engine, index_label='id', if_exists='append')
@@ -55,10 +66,33 @@ def excel_etl(src, sheet, table):
 
 
 # ETL for JSON datasets
-def json_etl():
+def json_etl(table):
 
-    data_dump = dumps(api_json)
-    df = pd.read_json(api_json, orient='split')
-    df.head()
+    # Define data types for the table
+    data_types = {
+        "username": VARCHAR(255),
+        "data": VARCHAR(255),
+        "data_hash": VARCHAR(255),
+        "last_updated": Date,
+        "city": VARCHAR(255),
+        "state": VARCHAR(255),
+    }
 
-#json_etl()
+    # "Flatten" the JSON data into a columnar format
+    flattened_json = json_normalize(api_json)
+    # load flattened JSON into a DataFrame
+    df = pd.DataFrame(flattened_json)
+    print(df)
+
+    try:
+        df.to_sql(table, db_engine, index_label='id', if_exists='append')
+        input(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
+
+    # Throw exception if data source is empty
+    except EmptyDataError:
+        input('Error: No data in data source! Press enter to exit.')
+    # Throw exception if data types are not compatible 
+    except DtypeWarning:
+        input('Error: Incompatible data type! Press enter to exit.')
+
+json_etl()
