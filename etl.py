@@ -2,10 +2,8 @@
 A basic Python-based ETL program for working with CSV data sources
 """
 
-import csv, os, sqlalchemy as sql
+import os, sqlalchemy as sql
 import pandas as pd
-import psycopg2 as pg
-from json import dumps
 from sqlalchemy.types import VARCHAR, Date
 from pandas.errors import DtypeWarning, EmptyDataError
 from pandas.io.json import json_normalize
@@ -65,7 +63,7 @@ def excel_etl(src, sheet, table):
         input('Error: Incompatible data type! Press enter to exit.')
 
 
-# ETL for JSON datasets
+# ETL for JSON datasets from an API
 def json_etl(table):
 
     # Define data types for the table
@@ -82,17 +80,14 @@ def json_etl(table):
     flattened_json = json_normalize(api_json)
     # load flattened JSON into a DataFrame
     df = pd.DataFrame(flattened_json)
-    print(df)
 
     try:
-        df.to_sql(table, db_engine, index_label='id', if_exists='append')
-        input(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
+        df.to_sql(table, db_engine, if_exists='append')
+        print(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
 
     # Throw exception if data source is empty
     except EmptyDataError:
-        input('Error: No data in data source! Press enter to exit.')
+        print('Error: No data in data source! Press enter to exit.')
     # Throw exception if data types are not compatible 
     except DtypeWarning:
-        input('Error: Incompatible data type! Press enter to exit.')
-
-json_etl()
+        print('Error: Incompatible data type! Press enter to exit.')

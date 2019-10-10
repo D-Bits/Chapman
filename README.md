@@ -9,5 +9,4 @@ Python based ETL program(s).
 * SQL Alchemy
 * Psycopg2 
 
-
   *See Pipfile for more info. 
