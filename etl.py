@@ -83,11 +83,11 @@ def json_etl(table):
 
     try:
         df.to_sql(table, db_engine, if_exists='append')
-        print(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
+        input(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
 
     # Throw exception if data source is empty
     except EmptyDataError:
-        print('Error: No data in data source! Press enter to exit.')
+        input('Error: No data in data source! Press enter to exit.')
     # Throw exception if data types are not compatible 
     except DtypeWarning:
-        print('Error: Incompatible data type! Press enter to exit.')
+        input('Error: Incompatible data type! Press enter to exit.')
