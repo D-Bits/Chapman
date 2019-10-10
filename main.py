@@ -1,11 +1,14 @@
-from etl import csv_etl, excel_etl
+from etl import csv_etl, excel_etl, json_etl
 from sqlalchemy import create_engine
+from subprocess import run
 
 
 # Store the user's options in a dictionary
 u_options = {
     1: 'Do ETL with a CSV file.',
     2: 'Do ETL with an Excel spreadsheet.',
+    3: "Load JSON data from an API into a database.",
+    4: "Compile an executable w/ PyInstaller"
 }
 
 
@@ -32,6 +35,7 @@ if __name__ == "__main__":
             raise Exception('Must specify a table in the database!')
         else:
             csv_etl(file_name, table_name)
+            input("ETL completed. Press enter to exit.")
             
     elif u_choice == 2:
         # Promt the user to enter a file name, and a sheet name
@@ -46,3 +50,16 @@ if __name__ == "__main__":
             raise Exception('Table name cannot be null!')
         else:
             excel_etl(file_name, sheet_name, table_name)
+            input("ETL completed. Press enter to exit.")
+    elif u_choice == 3:
+        table_name = input('Input the name of the table in the database that you want to load data into: ')
+        if table_name is None:
+            raise Exception('Table name cannot be null!')
+        else:
+            json_etl(table_name)
+            input("ETL completed. Press enter to exit.")
+    elif u_choice == 4:
+        run(['pyinstaller', 'main.py', '-F', '-n', 'PyETL'], check=True)
+    else:
+        input("Invalid value entered. Press enter to exit.")
+    
