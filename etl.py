@@ -26,7 +26,7 @@ def csv_etl(src, table):
 
     try:        
         df = pd.read_csv(src)
-        df.to_sql(table, db_engine, index_label='id', if_exists='append', dtype=data_types, chunksize=len(df))
+        df.to_sql(table, db_engine, index_label='id', dtype=data_types, if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
 
     # Throw exception if data source is empty           
@@ -52,7 +52,7 @@ def excel_etl(src, sheet, table):
 
     try:
         df = pd.read_excel(src, sheet_name=sheet)
-        df.to_sql(table, db_engine, index_label='id', if_exists='append')
+        df.to_sql(table, db_engine, index_label='id', dtype=data_types, if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
 
     # Throw exception if data source is empty
@@ -82,7 +82,7 @@ def json_etl(table):
     df = pd.DataFrame(flattened_json)
 
     try:
-        df.to_sql(table, db_engine, if_exists='append')
+        df.to_sql(table, db_engine, dtype=data_types, if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
 
     # Throw exception if data source is empty

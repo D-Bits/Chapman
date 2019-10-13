@@ -26,7 +26,7 @@ if __name__ == "__main__":
     u_choice = int(input('Enter an integer, based on the above options: '))
 
     if u_choice == 1:
-        # Promt the user to enter a file name
+        # Prompt the user to enter a file name
         file_name = input('Enter a full path, and a CSV file name, with the extension (Ex: "data.csv"): ')
         table_name = input('Input the name of the table in the database that you want to load data into: ')
         if file_name is None:
