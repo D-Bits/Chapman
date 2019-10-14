@@ -61,6 +61,9 @@ def excel_etl(src, sheet, table):
     # Throw exception if data types are not compatible 
     except DtypeWarning:
         input('Error: Incompatible data type! Press enter to exit.')
+    # Throw exception is data source cannot be found
+    except FileNotFoundError:
+        input('Error: Data source cannot be found. Press enter to exit.')
 
 
 # ETL for JSON datasets from an API
