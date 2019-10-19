@@ -1,4 +1,4 @@
-from etl import csv_etl, excel_etl, json_etl
+from etl import csv_etl, excel_etl, json_etl, aws_migration
 from sqlalchemy import create_engine
 from subprocess import run
 
@@ -8,7 +8,8 @@ u_options = {
     1: 'Do ETL with a CSV file.',
     2: 'Do ETL with an Excel spreadsheet.',
     3: "Load JSON data from an API into a database.",
-    4: "Compile an executable w/ PyInstaller"
+    4: "Migrate database tables for a local Postgres db to an AWS Postgres db.",
+    5: "Compile an executable w/ PyInstaller",
 }
 
 
@@ -37,7 +38,7 @@ if __name__ == "__main__":
             csv_etl(file_name, table_name)
             
     elif u_choice == 2:
-        # Promt the user to enter a file name, and a sheet name
+        # Prompt the user to enter a file name, and a sheet name
         file_name = input('Enter a full path, and file name for your Excel workbook, with the extension (Ex: "/username/home/documents/info.xlsx"): ')
         sheet_name = input('Enter a name for the sheet in your workbook that you would like to extract data from (Ex: "Sheet1"): ')
         table_name = input('Input the name of the table in the database that you want to load data into: ')
@@ -58,6 +59,16 @@ if __name__ == "__main__":
             json_etl(table_name)
 
     elif u_choice == 4:
+        local_table = input('Enter the name of a table in a local database to migrate: ')
+        aws_table = input('Enter an table in your AWS database that you want to migrate to: ')
+        if local_table is None:
+            raise Exception('Must specify source table!')
+        elif aws_table is None:
+            raise Exception('Must specify target table!')
+        else:
+            aws_migration(local_table, aws_table)
+
+    elif u_choice == 5:
         run(['pyinstaller', 'main.py', '-F', '-n', 'PyETL'], check=True)
     else:
         input("Invalid value entered. Press enter to exit.")

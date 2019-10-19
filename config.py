@@ -9,21 +9,23 @@ from requests import get
 
 
 # Define credentials for local Postgres instance
-pghost = getenv('PG_HOST')
-pguser = getenv('PG_USER')
-pgpass = getenv('PG_PASS')
+local_pghost = getenv('PG_HOST')
+local_pguser = getenv('PG_USER')
+local_pgpass = getenv('PG_PASS')
 pgport = getenv('PG_PORT')
-api_key = getenv('MOCKAROO_API_KEY')
 
 # Define credentials for AWS Postgres instance
-pghost = getenv('AWS_PG_HOST')
-pguser = getenv('AWS_PG_USER')
-pgpass = getenv('AWS_PG_PASS')
+aws_pghost = getenv('AWS_PG_HOST')
+aws_pguser = getenv('AWS_PG_USER')
+aws_pgpass = getenv('AWS_PG_PASS')
 
-db_connection = connect(database='etl_test', host=pghost, user=pguser, password=pgpass)
+local_conn = connect(database='etl_test', host=local_pghost, user=local_pguser, password=local_pgpass)
+aws_conn = connect(database='etl_test', host=local_pghost, user=local_pguser, password=local_pgpass)
 
-# Create a SQLAlchemy engine to write CSV data to the db
-db_engine = create_engine(f"postgresql+psycopg2://{pguser}:{pgpass}@{pghost}:{pgport}/etl_test")
+# Create a SQLAlchemy engine for the local Postgres instance 
+local_engine = create_engine(f"postgresql+psycopg2://{local_pguser}:{local_pgpass}@{local_pghost}:{pgport}/etl_test")
+# Create a SQLAlchemy engine for the AWS Postgres instance 
+aws_engine = create_engine(f"postgresql+psycopg2://{aws_pguser}:{aws_pgpass}@{aws_pghost}:{pgport}/etl_test")
 
 # API endpoint and key
 api_key = getenv('MOCKAROO_API_KEY')

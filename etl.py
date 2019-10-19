@@ -5,9 +5,10 @@ A basic Python-based ETL program for working with CSV data sources
 import os, sqlalchemy as sql
 import pandas as pd
 from sqlalchemy.types import VARCHAR, Date
+from sqlalchemy.dialects.postgresql import insert
 from pandas.errors import DtypeWarning, EmptyDataError
 from pandas.io.json import json_normalize
-from config import db_connection, db_engine, api_json  
+from config import local_conn, local_engine, aws_engine, api_json  
 
 
 # ETL for CSV files. "src" = csv file to extract from, 
@@ -26,7 +27,7 @@ def csv_etl(src, table):
 
     try:        
         df = pd.read_csv(src)
-        df.to_sql(table, db_engine, index_label='id', dtype=data_types, if_exists='append')
+        df.to_sql(table, local_engine, index_label='id', dtype=data_types, if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
 
     # Throw exception if data source is empty           
@@ -52,7 +53,7 @@ def excel_etl(src, sheet, table):
 
     try:
         df = pd.read_excel(src, sheet_name=sheet)
-        df.to_sql(table, db_engine, index_label='id', dtype=data_types, if_exists='append')
+        df.to_sql(table, local_engine, index_label='id', dtype=data_types, if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
 
     # Throw exception if data source is empty
@@ -85,7 +86,7 @@ def json_etl(table):
     df = pd.DataFrame(flattened_json)
 
     try:
-        df.to_sql(table, db_engine, dtype=data_types, if_exists='append')
+        df.to_sql(table, local_engine, dtype=data_types, if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the database. Press enter to exit.')
 
     # Throw exception if data source is empty
@@ -94,3 +95,16 @@ def json_etl(table):
     # Throw exception if data types are not compatible 
     except DtypeWarning:
         input('Error: Incompatible data type! Press enter to exit.')
+
+
+# Migrate a db table from a local Postgres instance to an AWS Postgres instance
+def aws_migration(src_table, target_table):
+
+    # Read from the source table, load into 
+    try: 
+        data_src = pd.read_sql_table(src_table, local_engine)
+        data_src.to_sql(target_table, aws_engine, index_label='id', if_exists='append')
+    # Throw exception if data source is empty           
+    except EmptyDataError:
+        input('Error: No data in data source! Press enter to exit.')
+ 
