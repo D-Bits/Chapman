@@ -36,6 +36,9 @@ def csv_etl(src, table):
     # Throw exception if data types are not compatible 
     except DtypeWarning:
         input('Error: Incompatible data type(s)! Press enter to exit.')
+    # Throw exception is data source cannot be found
+    except FileNotFoundError:
+        input('Error: Data source cannot be found. Press enter to exit.')
 
 
 # ETL for Excel work books
@@ -100,11 +103,15 @@ def json_etl(table):
 # Migrate a db table from a local Postgres instance to an AWS Postgres instance
 def aws_migration(src_table, target_table):
 
-    # Read from the source table, load into 
+    # Read from the source table, load into target table
     try: 
         data_src = pd.read_sql_table(src_table, local_engine)
         data_src.to_sql(target_table, aws_engine, index_label='id', if_exists='append')
+        input(f'{len(data_src)} records were successfully loaded from the local {src_table} table into the AWS {target_table} table. Press enter to exit.')
     # Throw exception if data source is empty           
     except EmptyDataError:
         input('Error: No data in data source! Press enter to exit.')
+    # Throw exception if data types are not compatible 
+    except DtypeWarning:
+        input('Error: Incompatible data type! Press enter to exit.')
  
