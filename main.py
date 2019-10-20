@@ -1,4 +1,4 @@
-from etl import csv_etl, excel_etl, json_etl, aws_migration
+from etl import csv_etl, excel_etl, json_etl, aws_pg_migration
 from sqlalchemy import create_engine
 from subprocess import run
 
@@ -9,7 +9,6 @@ u_options = {
     2: 'Do ETL with an Excel spreadsheet.',
     3: "Load JSON data from an API into a database.",
     4: "Migrate database tables for a local Postgres db to an AWS Postgres db.",
-    5: "Compile an executable w/ PyInstaller",
 }
 
 
@@ -66,10 +65,6 @@ if __name__ == "__main__":
         elif aws_table is None:
             raise Exception('Must specify target table!')
         else:
-            aws_migration(local_table, aws_table)
-
-    elif u_choice == 5:
-        run(['pyinstaller', 'main.py', '-F', '-n', 'PyETL'], check=True)
+            aws_pg_migration(local_table, aws_table)
     else:
-        input("Invalid value entered. Press enter to exit.")
-    
+        input('Invalid value entered. Press enter to exit.')
