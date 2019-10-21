@@ -5565,3 +5565,4 @@ myenv/Scripts/pip3.7.exe
 myenv/Scripts/pip3.exe
 myenv/Scripts/python.exe
 myenv/Scripts/pythonw.exe
+debugging.py
