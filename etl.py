@@ -27,7 +27,7 @@ def csv_etl(src, table):
     try:        
         df = pd.read_csv(src)
         df.to_sql(table, local_pg_engine, index_label='id', dtype=data_types, if_exists='append')
-        input(f'{len(df)} record(s) successfully loaded into {table}. Press enter to exit.')
+        input(f"{len(df)} record(s) successfully loaded into '{table}'. Press enter to exit.")
 
     # Throw exception if data source is empty           
     except EmptyDataError:
@@ -89,7 +89,7 @@ def json_etl(table):
 
     try:
         df.to_sql(table, local_pg_engine, dtype=data_types, if_exists='append')
-        input(f'{len(df)} record(s) successfully loaded into {table}. Press enter to exit.')
+        input(f"{len(df)} record(s) successfully loaded into '{table}'. Press enter to exit.")
 
     # Throw exception if data source is empty
     except EmptyDataError:
