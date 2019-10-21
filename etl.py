@@ -6,7 +6,7 @@ import pandas as pd
 from sqlalchemy.types import VARCHAR, Date
 from pandas.errors import DtypeWarning, EmptyDataError
 from pandas.io.json import json_normalize
-from config import local_conn, local_engine, aws_pg_engine, api_json  
+from config import local_pg_conn, local_engine, aws_pg_engine, api_json  
 
 
 # ETL for CSV files. "src" = csv file to extract from, 

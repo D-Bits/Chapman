@@ -1,4 +1,4 @@
-from config import db_connection 
+from config import local_pg_conn 
 import csv
 
 
@@ -10,7 +10,7 @@ def raw_sql_etl():
         reader = csv.reader(data_file)
         next(reader)  # Skip header row
         for row in reader:
-            db_connection.execute( # Parameterize query to avoid SQL injections
+            local_pg_conn.execute( # Parameterize query to avoid SQL injections
                 "INSERT INTO employees(fname, lname, email, street, city) VALUES(%s, %s, %s, %s, %s)",
                 row
             )
