@@ -9,31 +9,36 @@ from requests import get
 
 
 # Define credentials for local Postgres instance
-local_pghost = getenv('PG_HOST')
-local_pguser = getenv('PG_USER')
-local_pgpass = getenv('PG_PASS')
-pgport = getenv('PG_PORT')
+local_pg_creds = {
+    'host': getenv('PG_HOST'),
+    'user': getenv('PG_USER'),
+    'password': getenv('PG_PASS'),
+    'port': getenv('PG_PORT'),
+}
 
 # Define credentials for AWS Postgres instance
-aws_pghost = getenv('AWS_PG_HOST')
-aws_pguser = getenv('AWS_PG_USER')
-aws_pgpass = getenv('AWS_PG_PASS')
+aws_pg_creds = {
+    'host': getenv('AWS_PG_HOST'),
+    'user': getenv('AWS_PG_USER'),
+    'password': getenv('AWS_PG_PASS'),
+}
+
 
 # Create a SQLAlchemy engine for the local Postgres instance 
-local_pg_engine = create_engine(f"postgresql+psycopg2://{local_pguser}:{local_pgpass}@{local_pghost}:{pgport}/etl_test")
+local_pg_engine = create_engine(f"postgresql+psycopg2://{local_pg_creds['user']}:{local_pg_creds['password']}@{local_pg_creds['host']}:{local_pg_creds['port']}/etl_test")
 # Create a SQLAlchemy engine for the AWS Postgres instance 
-aws_pg_engine = create_engine(f"postgresql+psycopg2://{aws_pguser}:{aws_pgpass}@{aws_pghost}:{pgport}/etl_test")
-
-local_pg_conn = connect(database='etl_test', host=local_pghost, user=local_pguser, password=local_pgpass)
-aws_conn = connect(database='etl_test', host=local_pghost, user=local_pguser, password=local_pgpass)
+aws_pg_engine = create_engine(f"postgresql+psycopg2://{aws_pg_creds['user']}:{aws_pg_creds['password']}@{aws_pg_creds['host']}:{local_pg_creds['port']}/etl_test")
 
 # Define credentials for AWS SQL Server instance
-aws_msssql_host = getenv('AWS_MSSQL_HOST')
-aws_mssql_user = getenv('AWS_MSSQL_USER')
-aws_mssql_pass = getenv('AWS_MSSQL_PASS')
-aws_mssql_port = getenv('AWS_MSSQL_PORT')
+aws_mssql_creds = {
+    'host': getenv('AWS_MSSQL_HOST'),
+    'user': getenv('AWS_MSSQL_USER'),
+    'password': getenv('AWS_MSSQL_PASS'),
+    'port': getenv('AWS_MSSQL_PORT'),
+}
 
-aws_mssql_engine = create_engine(f"mssql+pyodbc://{aws_mssql_user}:{aws_mssql_pass}@{aws_msssql_host}:{aws_mssql_port}/etl_test?driver=SQL+Server+Native+Client+10.0") 
+# Create a SQLAlchemy engine for the AWS SQL Server instance 
+aws_mssql_engine = create_engine(f"mssql+pyodbc://{aws_mssql_creds['user']}:{aws_mssql_creds['password']}@{aws_mssql_creds['host']}:{aws_mssql_creds['port']}/etl_test?driver=SQL+Server+Native+Client+10.0") 
 
 
 # API endpoint and key

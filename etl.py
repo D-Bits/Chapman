@@ -6,7 +6,7 @@ import pandas as pd
 from sqlalchemy.types import VARCHAR, Date
 from pandas.errors import DtypeWarning, EmptyDataError
 from pandas.io.json import json_normalize
-from config import local_pg_conn, local_pg_engine, aws_pg_engine, aws_mssql_engine, api_json  
+from config import local_pg_engine, aws_pg_engine, aws_mssql_engine, api_json  
 from requests.exceptions import HTTPError, ContentDecodingError, ConnectionError
 
 
