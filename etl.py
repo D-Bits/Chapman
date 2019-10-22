@@ -4,9 +4,9 @@ A basic Python-based ETL program for working with CSV data sources
 
 import pandas as pd
 from sqlalchemy.types import VARCHAR, Date
-from pandas.errors import DtypeWarning, EmptyDataError
+from pandas.errors import DtypeWarning, EmptyDataError, PerformanceWarning
 from pandas.io.json import json_normalize
-from config import local_pg_engine, aws_pg_engine, aws_mssql_engine, api_json  
+from config import local_pg_engine, aws_pg_engine, aws_mssql_engine, local_pg_creds, api_json  
 from requests.exceptions import HTTPError, ContentDecodingError, ConnectionError
 
 
@@ -27,7 +27,7 @@ def csv_etl(src, table):
     try:        
         df = pd.read_csv(src)
         df.to_sql(table, local_pg_engine, index_label='id', dtype=data_types, if_exists='append')
-        input(f'{len(df)} record(s) successfully loaded into "{table}". Press enter to exit.')
+        input(f'{len(df)} record(s) successfully loaded into the "{table}" table in {local_pg_creds["host"]}. Press enter to exit.')
 
     # Throw exception if data source is empty           
     except EmptyDataError:
@@ -56,7 +56,7 @@ def excel_etl(src, sheet, table):
     try:
         df = pd.read_excel(src, sheet_name=sheet)
         df.to_sql(table, local_pg_engine, index_label='id', dtype=data_types, if_exists='append')
-        input(f'{len(df)} record(s) successfully loaded into "{table}". Press enter to exit.')
+        input(f'{len(df)} record(s) successfully loaded into the "{table}" table in {local_pg_creds["host"]}. Press enter to exit.')
 
     # Throw exception if data source is empty
     except EmptyDataError:
@@ -89,7 +89,7 @@ def json_etl(table):
 
     try:
         df.to_sql(table, local_pg_engine, dtype=data_types, if_exists='append')
-        input(f'{len(df)} record(s) successfully loaded into "{table}". Press enter to exit.')
+        input(f'{len(df)} record(s) successfully loaded into the "{table}" table in {local_pg_creds["host"]}. Press enter to exit.')
 
     # Throw exception if data source is empty
     except EmptyDataError:
