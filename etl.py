@@ -109,10 +109,20 @@ def json_etl(table):
 # Migrate a db table from a local Postgres instance to an AWS Postgres instance (Not yet working)
 def aws_pg_migration(src_table, target_table):
 
+    # Define data types for the users table
+    data_types = {
+        "last_name": VARCHAR(255),
+        "first_name": VARCHAR(255),
+        "email": VARCHAR(255),
+        "street": VARCHAR(255),
+        "city": VARCHAR(255),
+        "state": VARCHAR(255),
+    }
+
     # Read from the source table, load into target table
     try: 
         data_src = pd.read_sql_table(src_table, local_pg_engine)
-        data_src.to_sql(target_table, aws_pg_engine, index_label='id', if_exists='append')
+        data_src.to_sql(target_table, aws_pg_engine, index_label=False, if_exists='append')
         input(f'{len(data_src)} records were successfully loaded from the local "{src_table}" table into the AWS "{target_table}" table. Press enter to exit.')
     # Throw exception if data source is empty           
     except EmptyDataError:

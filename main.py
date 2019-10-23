@@ -1,4 +1,4 @@
-from etl import csv_etl, excel_etl, json_etl, aws_pg_migration
+from etl import csv_etl, excel_etl, json_etl, aws_pg_migration, aws_mssql_migration
 from sqlalchemy import create_engine
 from subprocess import run
 
@@ -9,6 +9,7 @@ u_options = {
     2: 'Do ETL with an Excel spreadsheet.',
     3: "Load JSON data from an API into a database.",
     4: "Migrate database tables for a local Postgres db to an AWS Postgres db.",
+    5: ""
 }
 
 
@@ -59,12 +60,23 @@ if __name__ == "__main__":
 
     elif u_choice == 4:
         local_table = input('Enter the name of a table in a local database to migrate: ')
-        aws_table = input('Enter an table in your AWS database that you want to migrate to: ')
+        aws_table = input('Enter an table in your AWS Postgres database that you want to migrate to: ')
         if local_table is None:
             raise Exception('Must specify source table!')
         elif aws_table is None:
             raise Exception('Must specify target table!')
         else:
             aws_pg_migration(local_table, aws_table)
+    
+    elif u_choice == 5:
+        local_table = input('Enter the name of a table in a local database to migrate: ')
+        aws_table = input('Enter an table in your AWS SQL Server database that you want to migrate to: ')
+        if local_table is None:
+            raise Exception('Must specify source table!')
+        elif aws_table is None:
+            raise Exception('Must specify target table!')
+        else:
+            aws_mssql_migration(local_table, aws_table)
+
     else:
         input('Invalid value entered. Press enter to exit.')
