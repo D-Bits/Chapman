@@ -6,7 +6,7 @@ from sqlalchemy.types import VARCHAR, Date, BigInteger
 from psycopg2.errors import NoDataFound
 from pandas.errors import DtypeWarning, EmptyDataError, PerformanceWarning
 from pandas.io.json import json_normalize
-from config import local_pg_engine, aws_pg_engine, aws_mssql_engine, local_pg_creds, local_pg_conn, api_json  
+from config import local_pg_engine, aws_pg_engine, aws_mssql_engine, local_pg_creds, local_pg_conn, server_listing_json
 from requests.exceptions import HTTPError, ContentDecodingError, ConnectionError
 
 
@@ -56,7 +56,8 @@ def excel_etl(src, sheet, table):
 
     try:
         df = pd.read_excel(src, sheet_name=sheet)
-        df.to_sql(table, local_pg_engine, index_label='id', dtype=data_types, if_exists='append')
+        new_index = df.set_index('id')
+        new_index.to_sql(table, local_pg_engine, index_label='id', dtype=data_types, if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the "{table}" table in {local_pg_creds["host"]}. Press enter to exit.')
 
     # Throw exception if data source is empty
@@ -85,9 +86,10 @@ def json_etl(table):
     }
 
     # "Flatten" the JSON data into a columnar format
-    flattened_json = json_normalize(api_json)
+    flattened_json = json_normalize(server_listing_json)
     # load flattened JSON into a DataFrame
-    df = pd.DataFrame(flattened_json)
+    data = pd.DataFrame(flattened_json)
+    df = data.set_index('id')
 
     try:
         df.to_sql(table, local_pg_engine, index_label='id', dtype=data_types, if_exists='append')
@@ -124,7 +126,8 @@ def aws_pg_migration(src_table, target_table):
     # Read from the source table, load into target table
     try: 
         data_src = pd.read_sql_table(src_table, local_pg_engine)
-        data_src.to_sql(target_table, aws_pg_engine, index_label='id', if_exists='fail')
+        df = data_src.set_index='id'
+        df.to_sql(target_table, aws_pg_engine, index_label='id', if_exists='fail')
         input(f'{len(data_src)} records were successfully loaded from the local "{src_table}" table into the AWS "{target_table}" table. Press enter to exit.')
     # Throw exception if data source is empty           
     except EmptyDataError:
