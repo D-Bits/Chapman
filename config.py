@@ -23,6 +23,13 @@ aws_pg_creds = {
     'password': getenv('AWS_PG_PASS'),
 }
 
+local_pg_conn = connect(
+    host=local_pg_creds['host'],
+    database='etl_test',
+    user=local_pg_creds['user'],
+    password=local_pg_creds['password'],
+    port=local_pg_creds['port'] 
+)
 
 # Create a SQLAlchemy engine for the local Postgres instance 
 local_pg_engine = create_engine(f"postgresql+psycopg2://{local_pg_creds['user']}:{local_pg_creds['password']}@{local_pg_creds['host']}:{local_pg_creds['port']}/etl_test")
