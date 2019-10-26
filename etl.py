@@ -44,21 +44,11 @@ def csv_etl(src, table):
 # ETL for Excel work books
 def excel_etl(src, sheet, table):
 
-    # Define data types for the table
-    data_types = {
-        "last_name": VARCHAR(255),
-        "first_name": VARCHAR(255),
-        "email": VARCHAR(255),
-        "street": VARCHAR(255),
-        "city": VARCHAR(255),
-        "state": VARCHAR(255),
-    }
-
     try:
-        df = pd.read_excel(src, sheet_name=sheet)
-        new_index = df.set_index('id')
-        new_index.to_sql(table, local_pg_engine, index_label='id', dtype=data_types, if_exists='append')
-        input(f'{len(df)} record(s) successfully loaded into the "{table}" table in {local_pg_creds["host"]}. Press enter to exit.')
+        data_src = pd.read_excel(src, sheet_name=sheet)
+        df = data_src.set_index('id')
+        df.to_sql(table, aws_pg_engine, index_label='id', if_exists='append')
+        input(f'{len(df)} record(s) successfully loaded into the "{table}" table in "{local_pg_creds["host"]}". Press enter to exit.')
 
     # Throw exception if data source is empty
     except EmptyDataError:
@@ -74,17 +64,6 @@ def excel_etl(src, sheet, table):
 # ETL for JSON datasets from an API
 def json_etl(table):
 
-    # Define data types for the table
-    data_types = {
-        "id": BigInteger,
-        "username": VARCHAR(255),
-        "data": VARCHAR(255),
-        "data_hash": VARCHAR(255),
-        "last_updated": Date,
-        "city": VARCHAR(255),
-        "state": VARCHAR(255),
-    }
-
     # "Flatten" the JSON data into a columnar format
     flattened_json = json_normalize(server_listing_json)
     # load flattened JSON into a DataFrame
@@ -92,7 +71,7 @@ def json_etl(table):
     df = data.set_index('id')
 
     try:
-        df.to_sql(table, local_pg_engine, index_label='id', dtype=data_types, if_exists='append')
+        df.to_sql(table, local_pg_engine, index_label='id', if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the "{table}" table in {local_pg_creds["host"]}. Press enter to exit.')
 
     # Throw exception if data source is empty
@@ -125,9 +104,9 @@ def aws_pg_migration(src_table, target_table):
 
     # Read from the source table, load into target table
     try: 
-        data_src = pd.read_sql_table(src_table, local_pg_engine)
+        data_src = pd.read_sql_table(src_table, local_pg_engine, index_col='id')
         df = data_src.set_index='id'
-        df.to_sql(target_table, aws_pg_engine, index_label='id', if_exists='fail')
+        df.to_sql(target_table, aws_pg_engine, index_label='id', if_exists='append')
         input(f'{len(data_src)} records were successfully loaded from the local "{src_table}" table into the AWS "{target_table}" table. Press enter to exit.')
     # Throw exception if data source is empty           
     except EmptyDataError:
@@ -153,7 +132,8 @@ def aws_mssql_migration(src_table, target_table):
     # Read from the source table, load into target table
     try: 
         data_src = pd.read_sql_table(src_table, local_pg_engine)
-        data_src.to_sql(target_table, aws_mssql_engine, index_label='id', dtype=data_types, if_exists='append')
+        df = data_src.set_index('id')
+        df.to_sql(target_table, aws_mssql_engine, index_label='id', dtype=data_types, if_exists='append')
         input(f'{len(data_src)} records were successfully loaded from the local "{src_table}" table into the AWS "{target_table}" table. Press enter to exit.')
     # Throw exception if data source is empty           
     except EmptyDataError:
