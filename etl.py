@@ -6,7 +6,7 @@ from sqlalchemy.types import VARCHAR, Date, BigInteger
 from psycopg2.errors import NoDataFound
 from pandas.errors import DtypeWarning, EmptyDataError, PerformanceWarning
 from pandas.io.json import json_normalize
-from config import local_pg_engine, aws_pg_engine, aws_mssql_engine, local_pg_creds, local_pg_conn, server_listing_json
+from config import local_pg_engine, aws_pg_engine, aws_mssql_engine, local_pg_creds, local_pg_conn, server_listing_json, aws_pg_creds
 from requests.exceptions import HTTPError, ContentDecodingError, ConnectionError
 
 
@@ -47,7 +47,7 @@ def excel_etl(src, sheet, table):
     try:
         data_src = pd.read_excel(src, sheet_name=sheet)
         df = data_src.set_index('id')
-        df.to_sql(table, aws_pg_engine, index_label='id', if_exists='append')
+        df.to_sql(table, local_pg_engine, index_label='id', if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the "{table}" table in "{local_pg_creds["host"]}". Press enter to exit.')
 
     # Throw exception if data source is empty

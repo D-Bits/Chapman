@@ -48,8 +48,13 @@ aws_mssql_creds = {
 aws_mssql_engine = create_engine(f"mssql+pyodbc://{aws_mssql_creds['user']}:{aws_mssql_creds['password']}@{aws_mssql_creds['host']}:{aws_mssql_creds['port']}/etl_test?driver=SQL+Server+Native+Client+10.0") 
 
 
-# API endpoint and key
+# API endpoint(s) and key
 api_key = getenv('MOCKAROO_API_KEY')
-endpoint = get(f'https://my.api.mockaroo.com/super_secret_info.json?key={api_key}')
-api_json = endpoint.json()
 
+# For "super secret" API
+secrets_endpoint = get(f'https://my.api.mockaroo.com/super_secret_info.json?key={api_key}')
+secrets_api_json = secrets_endpoint.json()
+
+# For "server listing" API
+server_listing_endpoint = get(f'https://my.api.mockaroo.com/server_listing.json?key={api_key}')
+server_listing_json = server_listing_endpoint.json()
