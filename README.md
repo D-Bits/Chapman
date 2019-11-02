@@ -1,6 +1,6 @@
 # Py-ETL
 
-Python based ETL program(s).
+An interactive, CLI-based program to do ETL work and data migrations with a varity of formats. 
 
 ## Key Tools Used
 
