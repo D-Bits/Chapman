@@ -64,13 +64,14 @@ def excel_etl(src, sheet, table):
 # ETL for JSON datasets from an API
 def json_etl(table):
 
-    # "Flatten" the JSON data into a columnar format
-    flattened_json = json_normalize(server_listing_json)
-    # load flattened JSON into a DataFrame
-    data = pd.DataFrame(flattened_json)
-    df = data.set_index('id')
-
     try:
+        # "Flatten" the JSON data into a columnar format
+        flattened_json = json_normalize(server_listing_json)
+        # load flattened JSON into a DataFrame
+        data = pd.DataFrame(flattened_json)
+        df = data.set_index('id')
+
+
         df.to_sql(table, local_pg_engine, index_label='id', if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the "{table}" table in {local_pg_creds["host"]}. Press enter to exit.')
 
