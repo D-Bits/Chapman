@@ -92,7 +92,7 @@ def json_etl(table):
         input('Connection Error. Press enter to exit.')
 
 
-# Migrate a db table from a local Postgres instance to an AWS Postgres instance (Not yet working)
+# Migrate a db table from a local Postgres instance to an AWS Postgres instance 
 def aws_pg_migration(src_table, target_table):
 
     # Read from the source table, load into target table
