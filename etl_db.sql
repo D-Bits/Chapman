@@ -43,3 +43,14 @@ CREATE TABLE users
 	zip INT,
 	PRIMARY KEY(id)
 );
+
+-- For API data
+CREATE TABLE stocks
+(
+	id SERIAL,
+	symbol VARCHAR(255),
+	current_value DECIMAL,
+	company VARCHAR(255),
+	market VARCHAR(10),
+	PRIMARY KEY(id)
+);
