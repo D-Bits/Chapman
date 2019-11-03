@@ -58,3 +58,7 @@ secrets_api_json = secrets_endpoint.json()
 # For "server listing" API
 server_listing_endpoint = get(f'https://my.api.mockaroo.com/server_listing.json?key={api_key}')
 server_listing_json = server_listing_endpoint.json()
+
+# For "stocks" API
+stocks_endpoint = get(f'https://my.api.mockaroo.com/stocks.json?key={api_key}')
+stocks_json = stocks_endpoint.json()
