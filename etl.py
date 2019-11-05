@@ -33,17 +33,18 @@ def csv_etl(src, table):
             # Skip header row 
             next(data_src)
 
-            # Count no. of rows in CSV file
-            row_count = sum(1 for row in data_src)
+            row_count = curs.execute(f'SELECT COUNT(*) FROM {table};')
 
             # Load data from CSV into db
             curs.copy_from(data_src, table, sep=',')
 
             # Commit the transaction to the database, and close the connection
             local_pg_conn.commit()
+            # Close the connection
             local_pg_conn.close()
+            
 
-            input(f'{row_count} record(s) successfully loaded into the "{table}" table in "{local_pg_creds["host"]}". Press enter to exit.')
+        input(f'{row_count} record(s) successfully loaded into the "{table}" table in "{local_pg_creds["host"]}". Press enter to exit.')
     
     # Throw exception is data source cannot be found
     except FileNotFoundError:
