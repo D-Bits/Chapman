@@ -55,14 +55,12 @@ def csv_etl(src, table):
         input('Error: Table does not exist in database! Press enter to exit.')
 
 
-
 # ETL for Excel work books
 def excel_etl(src, sheet, table):
 
     try:
         data_src = pd.read_excel(src, sheet_name=sheet)
         df = data_src.set_index('id', append=False)
-        print(df)
         df.to_sql(table, local_pg_engine, index_label='id', if_exists='append')
         input(f'{len(df)} record(s) successfully loaded into the "{table}" table in "{local_pg_creds["host"]}". Press enter to exit.')
 
@@ -75,6 +73,9 @@ def excel_etl(src, sheet, table):
     # Throw exception is data source cannot be found
     except FileNotFoundError:
         input('Error: Data source cannot be found. Press enter to exit.')
+    # Throw exception if table does not exist in DB.
+    except UndefinedTable:
+        input('Error: Table does not exist in database! Press enter to exit.')
 
 
 # ETL for JSON datasets from an API
@@ -103,6 +104,9 @@ def json_etl(table):
         input('Content decoding error. Press enter to exit.')
     except ConnectionError:
         input('Connection Error. Press enter to exit.')
+    # Throw exception if table does not exist in DB.
+    except UndefinedTable:
+        input('Error: Table does not exist in database! Press enter to exit.')
 
 
 # Migrate a db table from a local Postgres instance to an AWS Postgres instance 
@@ -119,6 +123,9 @@ def aws_pg_migration(src_table, target_table):
     # Throw exception if data types are not compatible 
     except DtypeWarning:
         input('Error: Incompatible data type! Press enter to exit.')
+    # Throw exception if table does not exist in DB.
+    except UndefinedTable:
+        input('Error: Table does not exist in database! Press enter to exit.')
 
 
 # Migrate a db table from a local Postgres instance to an AWS SQL Server instance (Not yet working)
@@ -135,4 +142,7 @@ def aws_mssql_migration(src_table, target_table):
     # Throw exception if data types are not compatible 
     except DtypeWarning:
         input('Error: Incompatible data type! Press enter to exit.')
+    # Throw exception if table does not exist in DB.
+    except UndefinedTable:
+        input('Error: Table does not exist in database! Press enter to exit.')
  
