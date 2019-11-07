@@ -3,7 +3,7 @@
  */
 
 -- For CSV mock data
-CREATE TABLE employees
+CREATE TABLE users
 (
 	id SERIAL,
 	last_name VARCHAR(255),
@@ -30,7 +30,7 @@ CREATE TABLE servers
 );
 
 -- For mock Excel data
-CREATE TABLE users
+CREATE TABLE employees
 (
 	id SERIAL,
 	last_name VARCHAR(255),
