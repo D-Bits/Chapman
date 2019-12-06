@@ -155,7 +155,7 @@ def aws_pg_migration(src_table, target_table):
     # Throw exception if table does not exist in DB.
     except UndefinedTable:
         input('Error: Table does not exist in database! Press enter to exit.')
-        
+
 
 # Migrate a db table from a local Postgres instance to an AWS SQL Server instance (Not yet working)
 def aws_mssql_migration(src_table, target_table):
@@ -174,4 +174,7 @@ def aws_mssql_migration(src_table, target_table):
     # Throw exception if table does not exist in DB.
     except UndefinedTable:
         input('Error: Table does not exist in database! Press enter to exit.')
+    # Throw erro if temp CSV file does not exist
+    except FileNotFoundError:
+        input('Error: Data source cannot be found! Press enter to exit.')
  
