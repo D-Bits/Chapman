@@ -14,6 +14,7 @@ local_pg_creds = {
     'user': getenv('PG_USER'),
     'password': getenv('PG_PASS'),
     'port': getenv('PG_PORT'),
+    'database': 'etl_test',
 }
 
 # Define credentials for AWS Postgres instance
@@ -21,6 +22,8 @@ aws_pg_creds = {
     'host': getenv('AWS_PG_HOST'),
     'user': getenv('AWS_PG_USER'),
     'password': getenv('AWS_PG_PASS'),
+    'port': getenv('PG_PORT'),
+    'database': 'etl_test',
 }
 
 local_pg_conn = connect(
@@ -28,6 +31,14 @@ local_pg_conn = connect(
     database='etl_test',
     user=local_pg_creds['user'],
     password=local_pg_creds['password'],
+    port=local_pg_creds['port'] 
+)
+
+aws_pg_conn = connect(
+    host=aws_pg_creds['host'],
+    database='etl_test',
+    user=aws_pg_creds['user'],
+    password=aws_pg_creds['password'],
     port=local_pg_creds['port'] 
 )
 
@@ -55,8 +66,8 @@ api_key = getenv('MOCKAROO_API_KEY')
 secrets_endpoint = get(f'https://my.api.mockaroo.com/super_secret_info.json?key={api_key}')
 secrets_api_json = secrets_endpoint.json()
 
-# For "server listing" API
-server_listing_endpoint = get(f'https://my.api.mockaroo.com/server_listing.json?key={api_key}')
+# For "servers" API
+server_listing_endpoint = get(f'https://my.api.mockaroo.com/servers.json?key=53c79190')
 server_listing_json = server_listing_endpoint.json()
 
 # For "stocks" API

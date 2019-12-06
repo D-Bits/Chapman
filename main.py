@@ -1,7 +1,5 @@
 from etl import csv_etl, excel_etl, json_etl, aws_pg_migration, aws_mssql_migration
-from sqlalchemy import create_engine
-from subprocess import run
-
+from timeit import timeit, default_timer
 
 # Store the user's options in a dictionary
 u_options = {
@@ -30,6 +28,7 @@ if __name__ == "__main__":
         # Prompt the user to enter a file name
         file_name = input('Enter a full path, and a CSV file name, with the extension (Ex: "data.csv"): ')
         table_name = input('Input the name of the table in the database that you want to load data into: ')
+
         if file_name is None:
             raise Exception('File name cannot be null!')
         elif table_name is None:
@@ -42,6 +41,7 @@ if __name__ == "__main__":
         file_name = input('Enter a full path, and file name for your Excel workbook, with the extension (Ex: "/username/home/documents/info.xlsx"): ')
         sheet_name = input('Enter a name for the sheet in your workbook that you would like to extract data from (Ex: "Sheet1"): ')
         table_name = input('Input the name of the table in the database that you want to load data into: ')
+
         if file_name is None:
             raise Exception('File and/or sheet name cannot be null!')
         elif sheet_name is None:
