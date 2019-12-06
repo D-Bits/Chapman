@@ -120,32 +120,42 @@ def json_etl(table):
 # Migrate a db table from a local Postgres instance to an AWS Postgres instance 
 def aws_pg_migration(src_table, target_table):
 
+    try:
+        # Extract the data, and dump it to a temporary CSV file
+        df = pd.read_sql_table(src_table, local_pg_engine, index_col='id')
+        df.to_csv('data/temp/sql_dump.csv', sep=',')
+            
+        # Create a cursor
+        curs = aws_pg_conn.cursor()
 
-    # Extract the data, and dump it to a temporary CSV file
-    df = pd.read_sql_table(src_table, local_pg_engine, index_col='id')
-    df.to_csv('data/temp/sql_dump.csv', sep=',')
+        with open('data/temp/sql_dump.csv', 'r', encoding="utf8") as data_src:
+
+            # Skip header row 
+            next(data_src)
+                    
+            # Load data from CSV into db
+            curs.copy_from(data_src, target_table, sep=',')
+
+            # Commit the transaction to the database, and close the connection
+            aws_pg_conn.commit()
+            aws_pg_conn.close()
         
-    # Create a cursor
-    curs = aws_pg_conn.cursor()
+        # Delete the CSV file, as it is no long necessary
+        remove('data/temp/sql_dump.csv')
 
-    with open('data/temp/sql_dump.csv', 'r', encoding="utf8") as data_src:
+        # Show the user how many records were migrated, and terminate program.
+        input(f'{len(df)} record(s) successfully loaded into the "{target_table}" table in "{aws_pg_creds["database"]}" on "{aws_pg_creds["host"]}". Press enter to exit.')
 
-        # Skip header row 
-        next(data_src)
-                
-        # Load data from CSV into db
-        curs.copy_from(data_src, target_table, sep=',')
-
-        # Commit the transaction to the database, and close the connection
-        aws_pg_conn.commit()
-        aws_pg_conn.close()
-    
-    # Delete the CSV file, as it is no long necessary
-    remove('data/temp/sql_dump.csv')
-
-    # Show the user how many records were migrated, and terminate program.
-    input(f'{len(df)} record(s) successfully loaded into the "{target_table}" table in "{aws_pg_creds["database"]}" on "{aws_pg_creds["host"]}". Press enter to exit.')
-
+    # Throw exception if data source is empty           
+    except EmptyDataError:
+        input('Error: No data in data source! Press enter to exit.')
+    # Throw exception if data types are not compatible 
+    except DtypeWarning:
+        input('Error: Incompatible data type! Press enter to exit.')
+    # Throw exception if table does not exist in DB.
+    except UndefinedTable:
+        input('Error: Table does not exist in database! Press enter to exit.')
+        
 
 # Migrate a db table from a local Postgres instance to an AWS SQL Server instance (Not yet working)
 def aws_mssql_migration(src_table, target_table):
