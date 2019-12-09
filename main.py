@@ -1,5 +1,5 @@
-from etl import csv_etl, excel_etl, json_etl, aws_pg_migration, aws_mssql_migration
-from timeit import timeit, default_timer
+from etl import ETL
+
 
 # Store the user's options in a dictionary
 u_options = {
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         elif table_name is None:
             raise Exception('Must specify a table in the database!')
         else:
-            csv_etl(file_name, table_name)
+            ETL.csv_etl(file_name, table_name)
             
     elif u_choice == 2:
         # Prompt the user to enter a file name, and a sheet name
@@ -49,14 +49,14 @@ if __name__ == "__main__":
         elif table_name is None:
             raise Exception('Table name cannot be null!')
         else:
-            excel_etl(file_name, sheet_name, table_name)
+           ETL.excel_etl(file_name, sheet_name, table_name)
 
     elif u_choice == 3:
         table_name = input('Input the name of the table in the database that you want to load data into: ')
         if table_name is None:
             raise Exception('Table name cannot be null!')
         else:
-            json_etl(table_name)
+           ETL.json_etl(table_name)
 
     elif u_choice == 4:
         local_table = input('Enter the name of a table in a local database to migrate: ')
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         elif aws_table is None:
             raise Exception('Must specify target table!')
         else:
-            aws_pg_migration(local_table, aws_table)
+           ETL.aws_pg_migration(local_table, aws_table)
     
     elif u_choice == 5:
         local_table = input('Enter the name of a table in a local database to migrate: ')
@@ -76,7 +76,7 @@ if __name__ == "__main__":
         elif aws_table is None:
             raise Exception('Must specify target table!')
         else:
-            aws_mssql_migration(local_table, aws_table)
+           ETL.aws_mssql_migration(local_table, aws_table)
 
     else:
         input('Invalid value entered. Press enter to exit.')
