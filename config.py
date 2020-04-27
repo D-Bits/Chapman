@@ -28,7 +28,7 @@ secrets_endpoint = get(f'https://my.api.mockaroo.com/super_secret_info.json?key=
 secrets_api_json = secrets_endpoint.json()
 
 # For "servers" API
-server_listing_endpoint = get(f'https://my.api.mockaroo.com/servers.json?key=53c79190')
+server_listing_endpoint = get(f'https://my.api.mockaroo.com/servers.json?key={api_key}')
 server_listing_json = server_listing_endpoint.json()
 
 # For "stocks" API
