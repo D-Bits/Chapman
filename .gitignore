@@ -6,6 +6,7 @@ __pycache__/etl.cpython-36.pyc
 __pycache__/etl.cpython-37.pyc
 env/
 build/
+.env
 
 tests/__pycache__/test_config.cpython-37.pyc
 __pycache__/main.cpython-37.pyc
