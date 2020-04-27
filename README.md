@@ -1,6 +1,6 @@
 # Chapman
 
-An interactive, CLI-based program to do ETL work and data migrations with a varity of formats. 
+An interactive, CLI-based program to do ETL work and data migrations with a variety of formats. 
 
 ## Key Tools Used
 
@@ -17,6 +17,6 @@ The *data* directory has various files with mock data to seed the database table
 
 ## Program Execution
 
-* Create a *virutalenv*, and activate it.
+* Create a *venv*, and activate it.
 * Run *pip install -r requirements.txt* to install dependencies.
 * Run *main.py*, and select from the options provided.
