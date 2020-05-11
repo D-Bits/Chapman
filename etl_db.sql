@@ -33,15 +33,16 @@ CREATE TABLE servers
 CREATE TABLE employees
 (
 	id SERIAL,
-	last_name VARCHAR(255),
-	first_name VARCHAR(255),
-	company VARCHAR(255),
-	email VARCHAR(255),
-	street VARCHAR(255),
-	city VARCHAR(255),
-	state VARCHAR(2),
-	zip INT,
-	PRIMARY KEY(id)
+	last_name VARCHAR(255) NOT NULL,
+	first_name VARCHAR(255) NOT NULL,
+	job VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	password_hash VARCHAR(300) NOT NULL,
+	phone VARCHAR(35),
+	home_address VARCHAR(255) NOT NULL,
+	city VARCHAR(150) NOT NULL,
+	state VARCHAR(255) NOT NULL,
+	zip INT NOT NULL
 );
 
 -- For API data
