@@ -6,8 +6,8 @@ u_options = {
     1: 'Do ETL with a CSV file.',
     2: 'Do ETL with an Excel spreadsheet.',
     3: "Load JSON data from an API into a database.",
-    4: "Migrate database tables to an AWS Postgres db.",
-    5: "Migrate database tables to an AWS MSSQL db."
+    4: "Migrate database tables to an GCP Postgres db.",
+    5: "Migrate database tables to an GCP MSSQL db."
 }
 
 
