@@ -7,17 +7,7 @@ from psycopg2.errors import NoDataFound, UndefinedTable
 from pandas.errors import DtypeWarning, EmptyDataError, PerformanceWarning
 from pandas.io.json import json_normalize
 from os import remove
-from config import(
-    local_pg_engine, 
-    aws_pg_engine,
-    aws_pg_conn, 
-    aws_mssql_engine, 
-    local_pg_creds, 
-    local_pg_conn,
-    server_listing_json, 
-    aws_pg_creds, 
-    stocks_json
-) 
+from config import local_pg_engine, local_pg_conn, gcp_pg_engine, local_db, local_host, server_listing_json
 from requests import get
 from requests.exceptions import HTTPError, ContentDecodingError, ConnectionError
 
@@ -51,7 +41,7 @@ class ETL():
                 local_pg_conn.close()
                 
 
-            input(f'{row_count} record(s) successfully loaded into the "{table}" table in "{local_pg_creds["database"]}" on "{local_pg_creds["host"]}". Press enter to exit.')
+            input(f'{row_count} record(s) successfully loaded into the "{table}" table in "{local_db}" on "{local_host}". Press enter to exit.')
         
         # Throw exception is data source cannot be found
         except FileNotFoundError:
@@ -74,7 +64,7 @@ class ETL():
             data_src = pd.read_excel(src, sheet_name=sheet)
             df = data_src.set_index('id', append=False)
             df.to_sql(table, local_pg_engine, index_label='id', if_exists='append', method='multi')
-            input(f'{len(df)} record(s) successfully loaded into the "{table}" table in "{local_pg_creds["host"]}". Press enter to exit.')
+            input(f'{len(df)} record(s) successfully loaded into the "{table}" table in "{local_host}". Press enter to exit.')
 
         # Throw exception if data source is empty
         except EmptyDataError:
@@ -101,7 +91,7 @@ class ETL():
             df = data.set_index('id')
 
             df.to_sql(table, local_pg_engine, index_label='id', if_exists='append', method='multi')
-            input(f'{len(df)} record(s) successfully loaded into the "{table}" table in "{local_pg_creds["database"]}" on "{local_pg_creds["host"]}". Press enter to exit.')
+            input(f'{len(df)} record(s) successfully loaded into the "{table}" table in "{local_db}" on "{local_host}". Press enter to exit.')
         
         # Throw exception if data source is empty
         except EmptyDataError:
