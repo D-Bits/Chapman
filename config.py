@@ -28,7 +28,7 @@ gcp_user = getenv("GCP_USER")
 gcp_pass = getenv("GCP_PASS")
 
 # For cursor.copy_from() w/ GCP db
-local_pg_conn = connect(database=gcp_db, user=gcp_user, password=gcp_pass, host=gcp_host, sslmode='require')
+gcp_pg_conn = connect(database=gcp_db, user=gcp_user, password=gcp_pass, host=gcp_host, sslmode='require')
 
 # Create a SQLAlchemy engine for the local Postgres instance
 local_pg_string = getenv("LOCAL_SQLA_STRING") 

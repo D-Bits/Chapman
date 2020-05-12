@@ -7,7 +7,16 @@ from psycopg2.errors import NoDataFound, UndefinedTable
 from pandas.errors import DtypeWarning, EmptyDataError, PerformanceWarning
 from pandas.io.json import json_normalize
 from os import remove
-from config import local_pg_engine, local_pg_conn, gcp_pg_engine, local_db, local_host, server_listing_json
+from config import( 
+    local_pg_engine, 
+    local_pg_conn, 
+    gcp_pg_string, 
+    gcp_pg_conn, 
+    gcp_pg_engine, 
+    local_db, 
+    local_host, 
+    server_listing_json
+)
 from requests import get
 from requests.exceptions import HTTPError, ContentDecodingError, ConnectionError
 
@@ -113,7 +122,7 @@ class ETL():
 
     # Migrate a db table from a local Postgres instance to an AWS Postgres instance
     @staticmethod 
-    def aws_pg_migration(src_table, target_table):
+    def gcp_pg_migration(src_table, target_table):
 
         try:
             # Extract the data, and dump it to a temporary CSV file

@@ -35,7 +35,7 @@ if __name__ == "__main__":
             raise Exception('Must specify a table in the database!')
         else:
             ETL.csv_etl(file_name, table_name)
-            
+
     elif u_choice == 2:
         # Prompt the user to enter a file name, and a sheet name
         file_name = input('Enter a full path, and file name for your Excel workbook, with the extension (Ex: "/username/home/documents/info.xlsx"): ')
