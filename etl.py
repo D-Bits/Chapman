@@ -12,7 +12,9 @@ from config import(
     local_pg_conn, 
     gcp_pg_string, 
     gcp_pg_conn, 
-    gcp_pg_engine, 
+    gcp_pg_engine,
+    gcp_host,
+    gcp_db, 
     local_db, 
     local_host, 
     server_listing_json
@@ -130,7 +132,7 @@ class ETL():
             df.to_csv('data/temp/sql_dump.csv', sep=',')
                 
             # Create a cursor
-            curs = aws_pg_conn.cursor()
+            curs = gcp_pg_conn.cursor()
 
             with open('data/temp/sql_dump.csv', 'r', encoding="utf8") as data_src:
 
@@ -141,14 +143,14 @@ class ETL():
                 curs.copy_from(data_src, target_table, sep=',')
 
                 # Commit the transaction to the database, and close the connection
-                aws_pg_conn.commit()
-                aws_pg_conn.close()
+                gcp_pg_conn.commit()
+                gcp_pg_conn.close()
             
             # Delete the CSV file, as it is no long necessary
             remove('data/temp/sql_dump.csv')
 
             # Show the user how many records were migrated, and terminate program.
-            input(f'{len(df)} record(s) successfully loaded into the "{target_table}" table in "{aws_pg_creds["database"]}" on "{aws_pg_creds["host"]}". Press enter to exit.')
+            input(f'{len(df)} record(s) successfully loaded into the "{target_table}" table in "{gcp_db}" on "{gcp_host}". Press enter to exit.')
 
         # Throw exception if data source is empty           
         except EmptyDataError:
